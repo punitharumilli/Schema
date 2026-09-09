@@ -1,0 +1,56 @@
+name: Validate schema and rules
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install lxml
+        run: pip install lxml
+
+      # Confirms every vendored dependency is present and that drmd.xsd compiles with no
+      # network access. This is the check that catches a missing supporting/ file before it
+      # reaches anyone else.
+      - name: Check vendored schemas and offline compilation
+        run: python tools/vendor_supporting_schemas.py --check
+
+      # Every rule must still fire for the case it was written for, and the worked examples
+      # must still raise nothing.
+      - name: Run the business rule test suite
+        run: python tests/test_rules.py
+
+      - name: Validate the worked examples
+        run: python tools/validate.py examples/*.xml
+
+      # Second opinion from a different XSD implementation: libxml2 rather than lxml's bindings,
+      # with --nonet so a stray network dependency cannot hide.
+      - name: Cross-check with xmllint (no network)
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq libxml2-utils
+          export XML_CATALOG_FILES="$PWD/catalog.xml"
+          for f in examples/*.xml; do
+            echo "--- $f"
+            xmllint --noout --nonet --schema drmd.xsd "$f"
+          done
+
+      # Third opinion, and not redundant. Xerces and libxml2 disagree in two ways that have
+      # already caused real defects here: Xerces refuses a schema file with an unresolvable
+      # DOCTYPE (which silently broke ds:Signature and therefore all of drmd.xsd), and Xerces
+      # enforces IDREF integrity, which libxml2 does not. See tests/XercesCheck.java.
+      - name: Cross-check with Xerces (JDK, no network)
+        run: |
+          javac tests/XercesCheck.java -d "$RUNNER_TEMP/xerces"
+          java -cp "$RUNNER_TEMP/xerces" XercesCheck catalog.xml drmd.xsd examples/*.xml

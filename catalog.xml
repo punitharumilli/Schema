@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  OASIS XML catalog for offline, reproducible DRMD validation.
+
+  WHY IT IS NEEDED
+  The vendored upstream schemas in supporting/ are kept as faithful, unmodified copies of the
+  files published by PTB and W3C. Two of them resolve their own dependencies over the network:
+
+    * supporting/dcc.xsd imports  https://ptb.de/si/v2.2.1/SI_Format.xsd
+                          and     https://www.ptb.de/dcc/d-sig/xmldsig-core-schema.xsd
+    * supporting/SI_Format.xsd imports
+                                  https://www.ptb.de/si/v2.2.1/qudt/quantitykind.xsd
+
+  Without this catalog a validator either needs internet access, or silently skips those
+  imports and then fails to compile drmd.xsd (the QUDT quantity-kind type would be undefined).
+  Worse, a network fetch can return a *different* revision from the one vendored here, so two
+  runs of the same validation can disagree. The catalog maps each remote address to the local
+  copy, so validation is deterministic and works with no network at all.
+
+  HOW TO USE IT
+    libxml2 / xmllint :  export XML_CATALOG_FILES=/path/to/schema/catalog.xml
+    Java (JAXP)       :  use an org.apache.xml.resolver / xmlresolver CatalogResolver
+    Python            :  see tools/validate.py, which sets XML_CATALOG_FILES for lxml
+
+  Keep this file next to drmd.xsd. The paths below are relative to this file's location.
+-->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+
+  <!-- D-SI (Digital System of Units), PTB, v2.2.1 -->
+  <uri    name="https://ptb.de/si/v2.2.1/SI_Format.xsd"     uri="supporting/SI_Format.xsd"/>
+  <system systemId="https://ptb.de/si/v2.2.1/SI_Format.xsd" uri="supporting/SI_Format.xsd"/>
+  <uri    name="https://www.ptb.de/si/v2.2.1/SI_Format.xsd"     uri="supporting/SI_Format.xsd"/>
+  <system systemId="https://www.ptb.de/si/v2.2.1/SI_Format.xsd" uri="supporting/SI_Format.xsd"/>
+
+  <!-- QUDT quantity kinds, referenced by D-SI -->
+  <uri    name="https://www.ptb.de/si/v2.2.1/qudt/quantitykind.xsd"     uri="supporting/quantitykind.xsd"/>
+  <system systemId="https://www.ptb.de/si/v2.2.1/qudt/quantitykind.xsd" uri="supporting/quantitykind.xsd"/>
+
+  <!-- XML Signature Syntax and Processing, W3C -->
+  <uri    name="https://www.ptb.de/dcc/d-sig/xmldsig-core-schema.xsd"     uri="supporting/xmldsig-core-schema.xsd"/>
+  <system systemId="https://www.ptb.de/dcc/d-sig/xmldsig-core-schema.xsd" uri="supporting/xmldsig-core-schema.xsd"/>
+  <uri    name="http://www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd"     uri="supporting/xmldsig-core-schema.xsd"/>
+  <system systemId="http://www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd" uri="supporting/xmldsig-core-schema.xsd"/>
+
+  <!-- DCC (Digital Calibration Certificate), PTB, v3.3.0 -->
+  <uri    name="https://ptb.de/dcc/v3.3.0/dcc.xsd"     uri="supporting/dcc.xsd"/>
+  <system systemId="https://ptb.de/dcc/v3.3.0/dcc.xsd" uri="supporting/dcc.xsd"/>
+
+</catalog>
