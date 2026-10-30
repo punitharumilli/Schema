@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2024 Bundesanstalt für Materialforschung und -prüfung (BAM)
+# SPDX-License-Identifier: LGPL-3.0-only
 """
 validate.py: run the two mandatory DRMD validation steps over one or more XML instances.
 

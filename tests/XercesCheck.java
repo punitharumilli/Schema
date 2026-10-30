@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 Bundesanstalt für Materialforschung und -prüfung (BAM)
+// SPDX-License-Identifier: LGPL-3.0-only
+
 /*
  * XercesCheck.java: validate DRMD instances with the JDK's own XSD validator.
  *

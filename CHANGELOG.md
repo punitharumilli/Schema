@@ -20,6 +20,12 @@ Future releases follow semantic versioning:
 
 Documentation only. The content model, the business rules and the version number are unchanged.
 
+* Licence files added: `COPYING.LESSER` (GNU LGPL v3) and `COPYING` (GNU GPL v3, on which the
+  LGPL builds), the licence of the schema, the rules and everything else BAM publishes here.
+  `supporting/LICENSE-W3C.txt` carries the W3C licence of `xmldsig-core-schema.xsd` and the
+  record of the one change made to it; `supporting/README.md` lists the copyright and licence of
+  each third-party file. `CONTRIBUTING.md` explains how to report an error or ask for a change.
+
 * The D-SI unit of mg/kg was written `\milli\gram\kilo\gram\tothe{-1}` in the annotation of
   `quantityType` (`drmd.xsd`) and in two values of `examples/product-information-sheet.xml`. D-SI
   rule R011 does not permit the prefix `\kilo` with `\gram`: the kilogram is always `\kilogram`

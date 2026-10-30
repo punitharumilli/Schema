@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2024 Bundesanstalt für Materialforschung und -prüfung (BAM)
+# SPDX-License-Identifier: LGPL-3.0-only
 """
 test_rules.py: prove that every rule in drmd-business-rules.sch actually fires.
 

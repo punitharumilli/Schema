@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2024 Bundesanstalt für Materialforschung und -prüfung (BAM)
+# SPDX-License-Identifier: LGPL-3.0-only
 """
 vendor_supporting_schemas.py: manage the third-party schemas in supporting/.
 

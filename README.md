@@ -14,6 +14,8 @@ schema/
 ├── drmd-business-rules.sch      Schematron: the ISO 33401:2024 requirements XSD cannot express
 ├── catalog.xml                  XML catalog, so validation runs offline and reproducibly
 ├── CHANGELOG.md
+├── CONTRIBUTING.md              how to report an error or ask for a change
+├── COPYING.LESSER, COPYING      the licence: GNU LGPL v3 and the GNU GPL v3 it builds on
 ├── supporting/                  vendored third-party schemas (DCC, D-SI, QUDT, XMLDSig)
 ├── examples/                    two worked, fully compliant instances
 ├── tests/                       proof that every rule fires when it should
@@ -158,7 +160,7 @@ digitalReferenceMaterialDocument              @schemaVersion required
 │   └── statement  (repeatable catch-all)                     [optional]
 │
 ├── comment                                                   [optional]
-├── document        embedded human-readable rendition         [optional]
+├── document        embedded files, e.g. the PDF rendition    [optional, repeatable]
 └── ds:Signature    XMLDSig, repeatable                       [optional]
 ```
 
@@ -409,12 +411,41 @@ difference between "not applicable" and "forgotten".
 
 ---
 
+## Changes and contributions
+
+BAM maintains the DRMD schema and the business rules and publishes the official releases in this
+repository. If you find an error or need a change, please tell us instead of publishing a changed
+copy: open an issue in this repository or write to [drmd@bam.de](mailto:drmd@bam.de). BAM reviews
+each request and releases changes as new versions (see `CHANGELOG.md`), so that every DRMD
+document refers to one schema. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
 ## Licence
 
-Copyright (c) 2024 Bundesanstalt für Materialforschung und -prüfung (BAM).
-Licensed under the GNU Lesser General Public License v3.0.
-The development of the Digital Reference Material Document (DRMD) is partially funded and
-supported by the QI-Digital project.
+Copyright (c) 2024 Bundesanstalt für Materialforschung und -prüfung (BAM)
 
-Files in `supporting/` are third-party and remain under their own licences; see
-`supporting/README.md`.
+The DRMD schema (`drmd.xsd`), the business rules (`drmd-business-rules.sch`), the catalog, the
+examples, the tools, the tests and the documentation in this repository are free software: you
+can redistribute them and/or modify them under the terms of the GNU Lesser General Public License
+as published by the Free Software Foundation, version 3 of the License (LGPL-3.0-only). They are
+distributed in the hope that they will be useful, but WITHOUT ANY WARRANTY; without even the
+implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+General Public License in [`COPYING.LESSER`](COPYING.LESSER) and the GNU General Public License,
+version 3, on which it builds, in [`COPYING`](COPYING).
+
+In short (the licence text is binding, not this summary):
+
+* Anyone may use the schema and the rules, also in their own software, for any purpose.
+* Changed versions may be made. Whoever passes one on must keep the copyright and licence
+  notices, mark the changed version prominently as changed, with a relevant date, and license it
+  under the LGPL-3.0 (GPL-3.0 section 5, on which the LGPL-3.0 builds).
+* The licence covers copyright only. It gives no right to use the name or logo of BAM, and a
+  changed version must not be presented as BAM's DRMD schema.
+* DRMD documents that you write according to the schema are your own documents.
+
+The files in `supporting/` are third-party files (PTB, W3C, QUDT.org) under their own licences;
+see [`supporting/README.md`](supporting/README.md).
+
+The development of the Digital Reference Material Document (DRMD) is partially funded and
+supported by the [QI-Digital](https://www.qi-digital.de/) project.
