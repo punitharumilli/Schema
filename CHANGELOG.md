@@ -16,9 +16,36 @@ Future releases follow semantic versioning:
 
 ---
 
+## Unreleased
+
+Documentation only. The content model, the business rules and the version number are unchanged.
+
+* The D-SI unit of mg/kg was written `\milli\gram\kilo\gram\tothe{-1}` in the annotation of
+  `quantityType` (`drmd.xsd`) and in two values of `examples/product-information-sheet.xml`. D-SI
+  rule R011 does not permit the prefix `\kilo` with `\gram`: the kilogram is always `\kilogram`
+  (D-SI guide v1.3, DOI 10.5281/zenodo.3816686, p. 72). Both now read
+  `\milli\gram\kilogram\tothe{-1}`.
+
+---
+
 ## 1.0.0
 
 First release.
+
+### Changes from the pre-release review
+
+Folded into 1.0.0 because the version had not yet been released.
+
+* `document` at the document root is now repeatable (`maxOccurs="unbounded"`). Besides the PDF
+  rendition of the RM document it can hold other documents, or several documents. This is the
+  only change to the content model; every document that was valid before is still valid.
+* The annotations in `drmd.xsd` were rewritten in plainer language that is closer to the
+  reference material field, and a few statements that were stricter than ISO 33401:2024 were
+  softened (for example the element order of `statements` is not an ISO requirement, and
+  metrological traceability is not tied to accreditation).
+* The `contact` annotation now states that every element of the address (`dcc:location`) is
+  optional and repeatable, as `dcc:locationType` defines it.
+* `drmd-business-rules.sch` is unchanged.
 
 ### What it is
 

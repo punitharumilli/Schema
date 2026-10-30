@@ -144,7 +144,7 @@
                   <si:label>Aqua regia extractable Pb</si:label>
                   <si:quantityTypeQUDT>MassFraction</si:quantityTypeQUDT>
                   <si:value>32.4</si:value>
-                  <si:unit>\milli\gram\kilo\gram\tothe{-1}</si:unit>
+                  <si:unit>\milli\gram\kilogram\tothe{-1}</si:unit>
                   <si:measurementUncertaintyUnivariate>
                     <si:expandedMU>
                       <si:valueExpandedMU>2.6</si:valueExpandedMU>
@@ -167,7 +167,7 @@
                   <si:label>Aqua regia extractable Cd</si:label>
                   <si:quantityTypeQUDT>MassFraction</si:quantityTypeQUDT>
                   <si:value>0.41</si:value>
-                  <si:unit>\milli\gram\kilo\gram\tothe{-1}</si:unit>
+                  <si:unit>\milli\gram\kilogram\tothe{-1}</si:unit>
                   <si:measurementUncertaintyUnivariate>
                     <si:expandedMU>
                       <si:valueExpandedMU>0.05</si:valueExpandedMU>
