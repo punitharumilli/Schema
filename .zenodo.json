@@ -1,0 +1,70 @@
+{
+  "upload_type": "software",
+  "title": "DRMD: Digital Reference Material Document, XML Schema and business rules",
+  "version": "1.0.0",
+  "creators": [
+    {
+      "name": "Arumilli, Punith Durga Prasad",
+      "affiliation": "Bundesanstalt für Materialforschung und -prüfung (BAM)",
+      "orcid": "0009-0004-1165-9000"
+    },
+    {
+      "name": "Melzer, Michael",
+      "affiliation": "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+    },
+    {
+      "name": "Monavari, Mehran",
+      "affiliation": "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+    },
+    {
+      "name": "Richter, Silke",
+      "affiliation": "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+    },
+    {
+      "name": "van de Kreeke, Johannes",
+      "affiliation": "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+    },
+    {
+      "name": "Prellwitz, Matthias",
+      "affiliation": "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+    },
+    {
+      "name": "Koch, Claudia",
+      "affiliation": "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+    }
+  ],
+  "description": "<p>The Digital Reference Material Document (DRMD) is an XML format for the documents that accompany reference materials: the RM certificate of a certified reference material and the product information sheet of any other reference material. This record archives release 1.0.0 of the DRMD XML Schema and its business rules, published by the Bundesanstalt für Materialforschung und -prüfung (BAM).</p><p><strong>Content.</strong> drmd.xsd defines the structure that both document types share. drmd-business-rules.sch contains 31 Schematron rules that check the requirements of ISO 33401:2024, Table 1, for each document type, at four severity levels derived from the requirement levels of the standard (error, conditional error, warning, no rule). Values, units and measurement uncertainties are written in the Digital System of Units (D-SI 2.2.1) of PTB; multilingual text, contacts, responsible persons and embedded files reuse the Digital Calibration Certificate (DCC 3.3.0) of PTB; quantity kinds come from QUDT 3.0.0; signatures follow W3C XML Signature. The release includes these third-party schemas with their licences, an XML catalog for offline validation, two worked examples, a validation tool and a test suite that shows that every rule fires.</p><p><strong>Use.</strong> A document complies only when it passes both the XML Schema and the business rules. See README.md for the rule catalogue and the commands for Python, xmllint, Java and Saxon.</p><p><strong>Licence.</strong> The work of BAM is licensed under the GNU Lesser General Public License, version 3 (LGPL-3.0-only), except the DRMD logo in assets/, which may be used only as described in LOGO_POLICY.md. The third-party files keep their own licences, listed in NOTICE and supporting/README.md. The schema, the rules and the documentation cite the subclause numbers, the requirement titles of Table 1 and their requirement levels of ISO 33401:2024, but do not reproduce the text of its subclauses.</p><p>The development of the DRMD is partially funded and supported by the QI-Digital project.</p>",
+  "license": "lgpl-3.0-only",
+  "access_right": "open",
+  "language": "eng",
+  "keywords": [
+    "reference materials",
+    "certified reference materials",
+    "ISO 33401",
+    "digital certificate",
+    "XML Schema",
+    "Schematron",
+    "D-SI",
+    "DCC",
+    "metrology",
+    "quality infrastructure"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://bamresearch.github.io/drmd-guidance/",
+      "relation": "isDocumentedBy",
+      "scheme": "url"
+    },
+    {
+      "identifier": "10.21014/tc6-2025.067",
+      "relation": "isDescribedBy",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.3366901",
+      "relation": "requires",
+      "scheme": "doi"
+    }
+  ],
+  "notes": "Part of the DRMD project of BAM: https://bamresearch.github.io/drmd/. The DRMD logo in assets/ is not covered by the LGPL-3.0; it may be used only as described in LOGO_POLICY.md."
+}

@@ -14,10 +14,9 @@ Licence:    W3C Software Notice and License (1998-07-20),
 Change made to the W3C file
 ---------------------------
 The DOCTYPE declaration and its internal subset were removed, so that the file can be read by the
-Xerces validator of the JDK. Nothing else was changed. The file has carried this change in this
-repository since 9 September 2026. tools/vendor_supporting_schemas.py repeats exactly this change
-whenever the file is refreshed from the W3C address above; README.md in this folder explains why
-the change is safe.
+Xerces validator of the JDK. Nothing else was changed. BAM made this change on 9 September 2026.
+tools/vendor_supporting_schemas.py repeats exactly this change whenever the file is refreshed
+from the W3C address above; README.md in this folder explains why the change is safe.
 
 
 W3C® SOFTWARE NOTICE AND LICENSE

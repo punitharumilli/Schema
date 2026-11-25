@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 Bundesanstalt für Materialforschung und -prüfung (BAM)
+// SPDX-FileCopyrightText: 2024-2026 Bundesanstalt für Materialforschung und -prüfung (BAM)
 // SPDX-License-Identifier: LGPL-3.0-only
 
 /*
@@ -33,6 +33,7 @@
  * Exit code 0 if the schema compiled and every instance is valid, 1 otherwise.
  */
 
+import javax.xml.XMLConstants;
 import javax.xml.catalog.CatalogFeatures;
 import javax.xml.catalog.CatalogManager;
 import javax.xml.catalog.CatalogResolver;
@@ -88,6 +89,11 @@ public class XercesCheck {
                 Path.of(args[0]).toUri());
 
         SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+        // No network and no DTDs: the schema may only read local files (the vendored copies that
+        // catalog.xml points to), so a missing catalog entry fails instead of fetching anything.
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file");
         factory.setResourceResolver(resolver);
         // An error handler on the FACTORY matters as much as one on the validator: without it,
         // a schema that failed to compile surfaces as a confusing complaint about an unrelated
@@ -108,10 +114,23 @@ public class XercesCheck {
         int invalid = 0;
         for (int i = 2; i < args.length; i++) {
             Validator validator = schema.newValidator();
+            // An instance document may come from anyone: it may not load a DTD, an external
+            // entity or a schema of its own.
+            validator.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            validator.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
             validator.setResourceResolver(resolver);
             Collector instanceErrors = new Collector("instance");
             validator.setErrorHandler(instanceErrors);
-            validator.validate(new StreamSource(new File(args[i])));
+            try {
+                validator.validate(new StreamSource(new File(args[i])));
+            } catch (org.xml.sax.SAXException e) {
+                // A fatal error has already been reported by the error handler; report the
+                // exception only when nothing was reported before it.
+                if (instanceErrors.errors == 0) {
+                    instanceErrors.errors++;
+                    System.out.println("  [instance] " + e.getMessage());
+                }
+            }
             System.out.println((instanceErrors.errors == 0 ? "  valid    " : "  INVALID  ")
                     + new File(args[i]).getName());
             if (instanceErrors.errors > 0) {

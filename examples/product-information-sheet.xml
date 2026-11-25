@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Worked example: a complete Product Information Sheet (RM profile).
+  SPDX-FileCopyrightText: 2024-2026 Bundesanstalt für Materialforschung und -prüfung (BAM)
+  SPDX-License-Identifier: LGPL-3.0-only
+
+  Worked example: a complete product information sheet (document type productInformationSheet).
 
   This file is part of the DRMD test suite. It is valid against drmd.xsd and raises no
   assertion of any severity from drmd-business-rules.sch.
 
   A product information sheet accompanies a reference material that is NOT a certified
-  reference material (ISO 33401:2024, 3.3). Its values are real measurement results, not
-  estimates, but they are not certified, so no properties block may carry isCertified="true"
-  (PIS-001, PIS-003), and neither a metrological traceability statement nor a stated
-  uncertainty is required. Both are included here anyway, which ISO 33401:2024 permits
+  reference material (ISO 33401:2024, 3.3). Its values are measured values, but they are not
+  certified, so no properties block may carry isCertified="true" (PIS-001, PIS-003), and neither
+  a metrological traceability statement nor a stated uncertainty is required. Both are included here anyway, which ISO 33401:2024 permits
   (Table 1 lists them as Optional for a product information sheet) and which makes the
   document more useful without changing its status.
 
@@ -50,7 +52,7 @@
       </drmd:contact>
     </drmd:referenceMaterialProducer>
 
-    <!-- Optional for this profile (ISO 33401:2024, Table 1, 5.3.5). Included as good practice. -->
+    <!-- Optional for this document type (ISO 33401:2024, Table 1, 5.3.5). Included as good practice. -->
     <drmd:respPersons>
       <dcc:respPerson id="respPerson_qm">
         <dcc:person>
@@ -70,7 +72,7 @@
         <dcc:content lang="en">Quality control soil EXA-QC-7</dcc:content>
       </drmd:name>
 
-      <!-- Recommended, not mandatory, for this profile (PIS-005 raises a warning if absent) -->
+      <!-- Recommended, not mandatory, for this document type (PIS-005 raises a warning if absent) -->
       <drmd:description>
         <dcc:content lang="en">Air-dried, sieved topsoil from an agricultural site, ground to pass
           a 250 micrometre sieve and homogenised by mixing. Supplied in 50 g amber glass jars with
@@ -199,8 +201,8 @@
     </drmd:intendedUse>
 
     <drmd:commutability>
-      <dcc:content lang="en">The assigned values are operationally defined and apply only to the
-        digestion procedure stated in the assigned values section. Commutability with other
+      <dcc:content lang="en">The measurands are operationally defined, so the assigned values apply
+        only to the digestion procedure stated in the assigned values section. Commutability with other
         extraction procedures has not been assessed and must not be assumed.</dcc:content>
     </drmd:commutability>
 

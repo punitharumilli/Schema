@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<drmd:digitalReferenceMaterialDocument xmlns:dcc="https://ptb.de/dcc" xmlns:drmd="https://example.org/drmd" xmlns:si="https://ptb.de/si" schemaVersion="0.3.0">
+  <drmd:administrativeData>
+    <drmd:coreData>
+      <drmd:titleOfTheDocument>referenceMaterialCertificate</drmd:titleOfTheDocument>
+      <drmd:uniqueIdentifier>BAM-F017</drmd:uniqueIdentifier>
+      <drmd:documentIdentifiers>
+        <drmd:documentIdentifier>
+          <drmd:scheme>BAM-CERT</drmd:scheme>
+          <drmd:value>BAM-F017</drmd:value>
+          <drmd:link>https://bam.de/crm/BAM-F017</drmd:link>
+        </drmd:documentIdentifier>
+      </drmd:documentIdentifiers>
+      <drmd:validity>
+        <drmd:timeAfterDispatch>
+          <drmd:period>P2Y</drmd:period>
+        </drmd:timeAfterDispatch>
+      </drmd:validity>
+    </drmd:coreData>
+    <drmd:referenceMaterialProducer>
+      <drmd:name>
+        <dcc:content lang="en">Bundesanstalt für Materialforschung und -prüfung (BAM)</dcc:content>
+      </drmd:name>
+      <drmd:contact>
+        <dcc:name>
+          <dcc:content lang="en">BAM Contact</dcc:content>
+        </dcc:name>
+        <dcc:eMail>sales.crm@bam.de</dcc:eMail>
+        <dcc:phone>+49 30 8104 2061</dcc:phone>
+        <dcc:fax>+49 30 8104 72061</dcc:fax>
+        <dcc:location>
+          <dcc:street>Richard-Willstätter-Str.</dcc:street>
+          <dcc:streetNo>11</dcc:streetNo>
+          <dcc:postCode>D-12489</dcc:postCode>
+          <dcc:city>Berlin</dcc:city>
+          <dcc:countryCode>DE</dcc:countryCode>
+        </dcc:location>
+      </drmd:contact>
+      <drmd:organizationIdentifiers>
+        <drmd:organizationIdentifier>
+          <drmd:scheme>ROR</drmd:scheme>
+          <drmd:value>b03x516a66</drmd:value>
+          <drmd:link>https://ror.org/b03x516a66</drmd:link>
+        </drmd:organizationIdentifier>
+      </drmd:organizationIdentifiers>
+    </drmd:referenceMaterialProducer>
+    <drmd:respPersons>
+      <dcc:respPerson>
+        <dcc:person>
+          <dcc:name>
+            <dcc:content lang="en">Dr. S. Richter</dcc:content>
+          </dcc:name>
+        </dcc:person>
+        <dcc:role>Committee for Certification</dcc:role>
+      </dcc:respPerson>
+      <dcc:respPerson>
+        <dcc:person>
+          <dcc:name>
+            <dcc:content lang="en">Dr. J. Pauli / Dr. U. Resch-Genger</dcc:content>
+          </dcc:name>
+        </dcc:person>
+        <dcc:role>Project Coordinators</dcc:role>
+      </dcc:respPerson>
+    </drmd:respPersons>
+    </drmd:administrativeData>
+  <drmd:materials>
+      <drmd:material>
+        <drmd:name>
+          <dcc:content lang="en">Fluorescence Quantum Yield Standard</dcc:content>
+        </drmd:name>
+        <drmd:description>
+          <dcc:content lang="en">
+            The fluorescence quantum yield standard BAM-F017 is supplied as a solid in a tightly closed glass bottle.
+            The Standard Operation Procedure (SOP) based on the publication by C. Wuerth et al. is included.
+          </dcc:content>
+        </drmd:description>
+				<drmd:minimumSampleSize>
+					<dcc:itemQuantity>
+						<si:realListXMLList>
+							<si:valueXMLList>0.2</si:valueXMLList>
+							<si:unitXMLList>g</si:unitXMLList>
+						</si:realListXMLList>
+					</dcc:itemQuantity>
+				</drmd:minimumSampleSize>
+                                <drmd:materialIdentifiers>
+                                        <drmd:materialIdentifier>
+                                                <drmd:scheme>BAM-RM</drmd:scheme>
+                                                <drmd:value>BAM-F017</drmd:value>
+                                                <drmd:link>https://bam.de/crm/BAM-F017</drmd:link>
+                                        </drmd:materialIdentifier>
+                                </drmd:materialIdentifiers>
+      </drmd:material>
+    </drmd:materials>
+    <drmd:materialPropertiesList>
+    <drmd:materialProperties isCertified="true">
+      <drmd:name>
+        <dcc:content lang="en">
+          Certified fluorescence quantum yield and its associated uncertainty.
+        </dcc:content>
+      </drmd:name>
+      <drmd:results>
+        <drmd:result>
+          <drmd:name>
+            <dcc:content lang="en">Certified Value</dcc:content>
+          </drmd:name>
+          <drmd:description>
+            <dcc:content lang="en">
+              a) Ethanolic dye solution of BAM-F017 with an absorbance at the excitation wavelength between 0.09 and 0.11.
+            </dcc:content>
+          </drmd:description>
+          <drmd:data>
+            <drmd:list>
+              <drmd:quantity refType="basic_measuredValue">
+                <dcc:name>
+                  <dcc:content lang="en">Fluorescence Quantum Yield (Φf)</dcc:content>
+                </dcc:name>
+                <si:real>
+                  <si:value>0.61</si:value>
+                  <si:unit>unitless</si:unit>
+                  <si:measurementUncertaintyUnivariate>
+                    <si:expandedMU>
+                      <si:valueExpandedMU>0.03</si:valueExpandedMU>
+                      <si:coverageFactor>2</si:coverageFactor>
+                      <si:coverageProbability>0.95</si:coverageProbability>
+                      <si:distribution>normal</si:distribution>
+                    </si:expandedMU>
+                  </si:measurementUncertaintyUnivariate>
+                </si:real>
+              </drmd:quantity>
+            </drmd:list>
+          </drmd:data>
+        </drmd:result>
+      </drmd:results>
+    </drmd:materialProperties>
+  </drmd:materialPropertiesList>
+  <drmd:statements>
+      <drmd:intendedUse>
+        <dcc:name>
+          <dcc:content lang="en">Intended Use</dcc:content>
+        </dcc:name>
+        <dcc:content lang="en">BAM-F017 dissolved in absolute ethanol is certified for use as a fluorescence quantum yield standard for the relative determination of fluorescence quantum yields of transparent luminophore solutions.</dcc:content>
+        </drmd:intendedUse>
+      <drmd:storageInformation>
+        <dcc:name>
+          <dcc:content lang="en">Storage Information</dcc:content>
+        </dcc:name>
+        <dcc:content lang="en">This certificate is valid for 2 years after dispatch, if the solid CRM is stored at 2 - 8 °C in the dark.
+          BAM-F017 can be shipped at room temperature.</dcc:content>
+        </drmd:storageInformation>
+      <drmd:instructionsForHandlingAndUse>
+        <dcc:name>
+          <dcc:content lang="en">Handling Instructions</dcc:content>
+        </dcc:name>
+        <dcc:content lang="en">Please follow the Standard Operation Procedure (SOP) provided with the material.</dcc:content>
+        </drmd:instructionsForHandlingAndUse>
+      <drmd:metrologicalTraceability>
+        <dcc:name>
+          <dcc:content lang="en">Metrological Traceability</dcc:content>
+        </dcc:name>
+        <dcc:content lang="en">The certified fluorescence quantum yield value was determined with a calibrated custom-built integrating sphere setup.</dcc:content>
+        </drmd:metrologicalTraceability>
+      <drmd:legalNotice>
+        <dcc:name>
+          <dcc:content lang="en">Legal Notice</dcc:content>
+        </dcc:name>
+        <dcc:content lang="en">Neither BAM, its contractors, nor any person acting on their behalf make any warranty or representation regarding intellectual property rights or assume any liability for damages.</dcc:content>
+        </drmd:legalNotice>
+      <drmd:referenceToCertificationReport>
+        <dcc:name>
+          <dcc:content lang="en">Reference to Certification Report</dcc:content>
+        </dcc:name>
+        <dcc:content lang="en">A detailed technical report describing the analysis procedures and the treatment of the analytical data used to certify BAM-F017 is available upon request.</dcc:content>
+        </drmd:referenceToCertificationReport>
+    </drmd:statements>
+  </drmd:digitalReferenceMaterialDocument>

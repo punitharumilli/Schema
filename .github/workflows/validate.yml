@@ -6,20 +6,27 @@ on:
   pull_request:
   workflow_dispatch:
 
+# The workflow only reads the repository. Each action is pinned to an exact, reviewed commit, so
+# a changed tag upstream cannot change what runs here.
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.x"
 
       - name: Install lxml
-        run: pip install lxml
+        run: pip install "lxml>=5,<7"
 
       # Confirms every vendored dependency is present and that drmd.xsd compiles with no
       # network access. This is the check that catches a missing supporting/ file before it
@@ -32,11 +39,26 @@ jobs:
       - name: Run the business rule test suite
         run: python tests/test_rules.py
 
+      # validate.py itself: the three verdicts and their exit codes, the XML Schema checks of the
+      # version and the period of validity, the IDREF check and the handling of untrusted documents.
+      - name: Run the validator test suite
+        run: python tests/test_validate.py
+
+      # Documents of the earlier release v0.3.0: the two examples of that release must convert to
+      # valid 1.0.0 documents with every value carried over.
+      - name: Check the conversion of DRMD v0.3.0 documents
+        run: python tests/test_convert.py
+
+      # Second Schematron implementation: the ISO skeleton for XSLT 1.0 in lxml must report the
+      # same rules as tools/validate.py for every test case.
+      - name: Cross-check the rules with the XSLT implementation
+        run: python tests/cross_check_xslt.py
+
       - name: Validate the worked examples
         run: python tools/validate.py examples/*.xml
 
-      # Second opinion from a different XSD implementation: libxml2 rather than lxml's bindings,
-      # with --nonet so a stray network dependency cannot hide.
+      # The same libxml2 engine as lxml, but through its own command line and with --nonet, so a
+      # stray network dependency cannot hide.
       - name: Cross-check with xmllint (no network)
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq libxml2-utils
@@ -46,7 +68,7 @@ jobs:
             xmllint --noout --nonet --schema drmd.xsd "$f"
           done
 
-      # Third opinion, and not redundant. Xerces and libxml2 disagree in two ways that have
+      # Second XSD implementation, and not redundant. Xerces and libxml2 disagree in two ways that have
       # already caused real defects here: Xerces refuses a schema file with an unresolvable
       # DOCTYPE (which silently broke ds:Signature and therefore all of drmd.xsd), and Xerces
       # enforces IDREF integrity, which libxml2 does not. See tests/XercesCheck.java.

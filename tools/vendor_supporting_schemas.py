@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: 2024 Bundesanstalt für Materialforschung und -prüfung (BAM)
+# SPDX-FileCopyrightText: 2024-2026 Bundesanstalt für Materialforschung und -prüfung (BAM)
 # SPDX-License-Identifier: LGPL-3.0-only
 """
 vendor_supporting_schemas.py: manage the third-party schemas in supporting/.
@@ -74,8 +74,8 @@ def generate_quantitykind(ttl_path: Path, out_path: Path) -> int:
 
     The result defines {http://qudt.org/vocab/}quantitykind, the type D-SI gives to
     si:quantityTypeQUDT and its list variants. It accepts both the QUDT local name
-    (recommended, e.g. MassFraction) and the full QUDT IRI, so a document that validates
-    against PTB's published file also validates against this one.
+    (recommended, e.g. MassFraction) and the full QUDT IRI, the two forms PTB's published file
+    is expected to accept; it has not been compared with that file.
 
     The type restricts xs:token. That is not cosmetic: si:quantityTypeQUDT substitutes for the
     abstract element si:quantityType, whose type is xs:string, and XSD 1.0 requires the
@@ -98,6 +98,10 @@ def generate_quantitykind(ttl_path: Path, out_path: Path) -> int:
 
     header = f"""<?xml version="1.0" encoding="UTF-8"?>
 <!--
+  SPDX-FileCopyrightText: 2026 Bundesanstalt für Materialforschung und -prüfung (BAM)
+  SPDX-FileCopyrightText: QUDT.org (names of the quantity kinds)
+  SPDX-License-Identifier: LGPL-3.0-only AND CC-BY-4.0
+
   quantitykind.xsd: QUDT quantity-kind type for the D-SI schema (SI_Format.xsd).
 
   WHY THIS FILE EXISTS
@@ -114,8 +118,9 @@ def generate_quantitykind(ttl_path: Path, out_path: Path) -> int:
   tools/vendor_supporting_schemas.py. {len(kinds)} quantity kinds are enumerated.
 
   STATUS: LOCAL SUBSTITUTE
-  This is a local substitute for PTB's published quantitykind.xsd, not a copy of it. It is
-  written to accept every value PTB's file is expected to accept: for each QUDT quantity kind
+  This is a local substitute for PTB's published quantitykind.xsd, not a copy of it, and it has
+  not been compared with PTB's file. It is written to accept the values PTB's file is expected
+  to accept: for each QUDT quantity kind
   both the local name (recommended, e.g. "MassFraction") and the full QUDT IRI
   (e.g. "http://qudt.org/vocab/quantitykind/MassFraction") are permitted. Run
   tools/vendor_supporting_schemas.py with the "refresh" option to replace this file with PTB's
@@ -126,8 +131,13 @@ def generate_quantitykind(ttl_path: Path, out_path: Path) -> int:
   abstract element si:quantityType (type xs:string), and XSD 1.0 requires the substituting
   element's type to be validly derived from the head element's type.
 
-  QUDT is published by the QUDT.org project under the Creative Commons Attribution 4.0
-  International licence (CC BY 4.0). See https://qudt.org/ for terms and attribution.
+  LICENCE AND ATTRIBUTION
+  The names and IRIs of the quantity kinds are taken from the QUDT Quantity Kind Vocabulary
+  (QUDT.org, http://qudt.org/vocab/quantitykind), licensed under Creative Commons Attribution
+  4.0 International (CC BY 4.0, https://creativecommons.org/licenses/by/4.0/). Changes made:
+  only the names and IRIs were extracted and written as an XML Schema enumeration. QUDT.org
+  does not endorse the DRMD. The structure and comments of this file are by BAM, under the GNU
+  Lesser General Public License, version 3 (LGPL-3.0-only).
 
   Generated: {datetime.date.today().isoformat()}
 -->
@@ -189,8 +199,8 @@ def strip_doctype(data: bytes) -> bytes:
         at 49 components.
 
     libxml2 accepts the file either way, so nothing is lost by stripping it, and JVM validation
-    goes from impossible to working. tests/test_rules.py and the CI workflow both check that the
-    schema still compiles after a refresh.
+    goes from impossible to working. The --check command of this script and the Xerces step of the
+    CI workflow check that the schema still compiles after a refresh.
     """
     return DOCTYPE_RE.sub(b"", data, count=1)
 

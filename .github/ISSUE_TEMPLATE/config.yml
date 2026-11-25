@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security problem
+    url: https://github.com/BAMresearch/drmd-schema/security/advisories/new
+    about: Please report security problems privately, not in a public issue (see SECURITY.md).
+  - name: E-mail to the DRMD team at BAM
+    url: mailto:drmd@bam.de
+    about: For questions you prefer not to ask in public. Do not send confidential documents.

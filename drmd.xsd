@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Temporary namespace URN used because no official project domain is assigned yet. -->
+<!--
+  SPDX-FileCopyrightText: 2024-2026 Bundesanstalt für Materialforschung und -prüfung (BAM)
+  SPDX-License-Identifier: LGPL-3.0-only
+
+  DRMD: Digital Reference Material Document, XML Schema, version 1.0.0
+  Namespace: urn:drmd:schema. Each instance document states the release it follows in
+  @schemaVersion. The companion business rules are in drmd-business-rules.sch; a document
+  complies only when it passes both files (see README.md).
+-->
 <xs:schema
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:drmd="urn:drmd:schema"
@@ -29,7 +37,8 @@
         Specifies the semantic version string (major.minor.patch) of the DRMD schema specification
         that the instance document follows (e.g., "1.0.0").
         Major version updates signify breaking structural changes that require parsers to be migrated.
-        Minor version updates indicate backward-compatible additions of optional elements or identifier schemes.
+        Minor version updates indicate backward-compatible additions, and business rules brought closer to
+        ISO 33401:2024 (a document that passed before may then report a new finding).
         Patch versions address non-structural schema documentation corrections or minor text clarifications.
         Because patch updates never change the content model, consumers MUST accept any patch level
         within a supported major.minor line: a document declaring "1.0.0" and a document declaring
@@ -37,7 +46,8 @@
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
-      <xs:pattern value="\d+\.\d+\.\d+"/>
+      <!-- This schema is release 1.0; it accepts the patch levels of 1.0 only. -->
+      <xs:pattern value="1\.0\.\d+"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -46,8 +56,16 @@
     <xs:annotation>
       <xs:documentation>
         The type of the document. It decides which requirements of ISO 33401:2024, Table 1 apply.
-        - referenceMaterialCertificate: the document is an RM certificate for a Certified Reference Material (CRM) per ISO 33401:2024. The document MUST contain at least one property value with an associated measurement uncertainty and a metrological traceability statement. Software can rely on values marked as certified carrying both.
-        - productInformationSheet: the document is a product information sheet for a Reference Material (RM) per ISO 33401:2024. Property values are valid measurement results but are not required to include measurement uncertainty or metrological traceability. The distinction from a certificate is solely that no value is certified with uncertainty and traceability.
+        - referenceMaterialCertificate: the document is an RM certificate, which accompanies a certified
+          reference material (CRM). It MUST contain at least one certified property value, each certified
+          value with its measurement uncertainty, and the metrological traceability of the certified
+          values. Software can rely on every numeric value marked as certified carrying an uncertainty; a
+          value given as text (dcc:noQuantity, dcc:charsXMLList) can be qualitative or nominal and is not
+          checked for one.
+        - productInformationSheet: the document is a product information sheet, which accompanies any
+          other reference material (RM). Its property values can be measured, assigned or nominal values;
+          they are not certified values, and uncertainties and metrological traceability may be stated but
+          are not required.
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
@@ -179,14 +197,20 @@
           - SI and SI-compatible units are written as D-SI unit strings in si:unit (for example \gram,
             \milli\gram\kilogram\tothe{-1}).
           - A unit that D-SI cannot express is reported with si:hybrid: at least one si:real inside the hybrid
-            carries the value in a machine-readable SI unit, and a sibling si:real carries the same value in the
-            non-SI unit. The SI-encoded sibling is what keeps the value computable; the non-SI sibling preserves
-            the form the field expects. Where the non-SI unit itself needs defining, dcc:nonSIUnit and
-            dcc:nonSIDefinition inside properties/measurementMetaData carry that definition.
+            carries the value converted to a machine-readable SI unit, as the D-SI guide describes, and a sibling
+            si:real carries the value in the non-SI unit. The SI-encoded sibling is what keeps the value computable;
+            the non-SI sibling preserves the form the field expects. For a conventional scale whose value is
+            computed from SI quantities (for example Brinell hardness, computed from the test force and the area
+            of the indentation), the SI sibling gives that quantity, and dcc:nonSIDefinition states the relation.
+            Where the non-SI unit itself needs defining, dcc:nonSIUnit and dcc:nonSIDefinition inside
+            properties/measurementMetaData carry that definition. A value on a conventional reference scale with
+            no SI equivalent (an ordinal quantity such as an octane number) has no machine-readable D-SI form;
+            give it as dcc:noQuantity, with the value and its scale in the text.
           - The KIND of quantity (for example MassFraction, Density, AmountOfSubstanceConcentration) is stated
             separately from the unit with si:quantityTypeQUDT, which D-SI types against the QUDT quantity-kind
             vocabulary. It is available inside si:real and the list variants, and is recommended for every
-            certified value: it tells a consumer what was measured, which a unit alone does not.
+            certified value: it states the kind of quantity, which a unit alone does not (a mass fraction and
+            a volume fraction share the unit \one). It does not replace the description of the measurand.
         A QUDT quantity kind is not a substitute for a unit and never replaces si:unit.
       </xs:documentation>
     </xs:annotation>
@@ -209,7 +233,7 @@
   <xs:annotation>
     <xs:documentation>
       DRMD: Digital Reference Material Document
-      Copyright (c) 2024 Bundesanstalt für Materialforschung und -prüfung (BAM)
+      Copyright (c) 2024-2026 Bundesanstalt für Materialforschung und -prüfung (BAM)
 
       This XML Schema Definition (XSD) is free software: you can redistribute
       it and/or modify it under the terms of the GNU Lesser General Public License
@@ -221,28 +245,27 @@
       is partially funded and supported by the QI-Digital project.
     </xs:documentation>
     <xs:documentation>
-      DUAL-PROFILE ARCHITECTURE
-      This schema supports two document profiles governed by the titleOfTheDocument element:
-        - referenceMaterialCertificate (CRM): Certified Reference Material documents per ISO 33401:2024.
-        - productInformationSheet (RM): Reference Material documents per ISO 33401:2024.
+      TWO DOCUMENT TYPES, ONE STRUCTURE
+      This schema serves two document types, chosen by the titleOfTheDocument element:
+        - referenceMaterialCertificate: the RM certificate, for a certified reference material (CRM).
+        - productInformationSheet: the product information sheet of any other reference material (RM).
 
-      Both profiles share an identical XML structure. The minOccurs constraints in this XSD
-      are set to the most permissive level (accommodating the productInformationSheet profile).
-      Profile-specific mandatory requirements (e.g., metrological traceability for CRM,
-      uncertainty assignment for certified values, material description for CRM,
-      approving officer/responsible persons for CRM) are enforced by the companion Schematron
-      validation file: drmd-business-rules.sch
+      Both types share an identical XML structure. The minOccurs constraints in this XSD
+      are set to the most permissive level (that of the product information sheet).
+      Mandatory requirements that depend on the type (e.g., in an RM certificate: the statement of
+      metrological traceability, the uncertainty of every certified value, the description of the
+      material and the responsible persons with the approving officer) are enforced by the
+      companion Schematron validation file: drmd-business-rules.sch
 
       IMPORTANT: Full validation requires running BOTH this XSD schema AND
-      the companion Schematron rules. The XSD alone cannot check the profile-specific
-      requirements of ISO 33401:2024, Table 1.
+      the companion Schematron rules. The XSD alone cannot check the requirements of
+      ISO 33401:2024, Table 1, that depend on the document type.
     </xs:documentation>
     <xs:documentation>
-      DOCUMENT COMPONENTS (ISO 33401:2024, Section 5.2.12)
-      ISO 33401:2024 requires that an RM document be arranged so that all its components are
-      recognisable as part of the whole document and that the end of the document is clearly
-      marked. In a DRMD instance this requirement is met by the XML document itself rather than
-      by a dedicated element:
+      DOCUMENT COMPONENTS (ISO 33401:2024, 5.2.12)
+      ISO 33401:2024, 5.2.12, asks that every part of an RM document can be identified as belonging
+      to that document and that its end can be recognised. In a DRMD instance this requirement is
+      met by the XML document itself rather than by a dedicated element:
         - a DRMD instance is a single well-formed XML document with exactly one
           drmd:digitalReferenceMaterialDocument root element, so its start and end are explicit
           and every component is, by construction, inside the whole;
@@ -250,10 +273,9 @@
           follow, and coreData/documentVersion states which revision of the content they belong to;
         - coreData/uniqueIdentifier binds every component to one document instance.
       Producers who additionally publish a human-readable rendition SHOULD embed it in a
-      root-level drmd:document element (or reference it from
-      statements/referenceToCertificationReport) so that the machine-readable and human-readable
+      root-level drmd:document element, so that the machine-readable and human-readable
       components travel together and cannot be separated in handling.
-      No Schematron rule is defined for Section 5.2.12: the requirement is satisfied structurally,
+      No Schematron rule is defined for 5.2.12: the requirement is satisfied structurally,
       and an assertion that always holds would only add noise to validation reports.
     </xs:documentation>
     <xs:documentation>
@@ -323,8 +345,9 @@
       <xs:element name="statements" type="drmd:statementListType">
         <xs:annotation>
           <xs:documentation>
-            The ordered sequence of auxiliary, narrative operational notes for handling and use of the
-            material, including storage information and pre-treatment directives.
+            The statements on the material: intended use, commutability, storage, handling and use,
+            metrological traceability, health and safety, subcontractors, legal notice, the reference
+            to a certification report, and any further statement.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -389,12 +412,12 @@
             The persons responsible for the document, including the approving officer, each with their
             role or function (e.g., 'Head of Department', 'Quality Manager') and contact details.
             dcc:mainSigner can mark the person who signs the document.
-            PROFILE NOTE (ISO 33401:2024, Section 5.3.5): This element is structurally optional in the XSD.
+            DOCUMENT TYPES (ISO 33401:2024, 5.3.5): This element is structurally optional in the XSD.
             For referenceMaterialCertificate documents, the name AND FUNCTION of the RM producer's
             approving officer is MANDATORY. Two Schematron rules enforce this together: RMC-010 requires the
             respPersons list to be present, and RMC-012 requires at least one dcc:respPerson in it to state a
-            dcc:role, because ISO 33401:2024 asks for the officer's function and not only their name. The
-            function may be the name of the responsible organisational unit rather than a personal job title.
+            dcc:role, because ISO 33401:2024 asks for the officer's function and not only their name. By the
+            note to ISO 33401:2024, 5.3.5, the name may be that of the responsible organisation.
             For productInformationSheet documents, this element is optional.
           </xs:documentation>
         </xs:annotation>
@@ -406,7 +429,8 @@
     <xs:annotation>
       <xs:documentation>
         Core data about the document: its type (RM certificate or product information sheet), its
-        unique identifier, its version, optional further identifiers, and its period of validity.
+        unique identifier, its version, optional further identifiers, and the period of validity of the
+        material.
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
@@ -418,9 +442,9 @@
             A mandatory identifier of this DOCUMENT that is unique worldwide (a UUID is recommended).
             If the content is changed after issue, a new document with a new unique identifier is
             issued; the existing document is not edited.
-            SCOPE NOTE (ISO 33401:2024, Section 5.2.3): this element identifies the document, not the reference
-            material. The unique identifier OF THE RM required by Section 5.2.3, typically a product code combined
-            with a batch or lot number such as "NMIJ CRM 7305-a" or "ERM-AC110", is carried by
+            SCOPE NOTE (ISO 33401:2024, 5.2.3): this element identifies the document, not the reference
+            material. The unique identifier OF THE RM required by 5.2.3, typically a product code, combined where
+            needed with a batch or lot number, such as "BAM-M386a", is carried by
             materials/material/materialIdentifiers and is enforced by Schematron rule DRMD-016. Do not use this
             element for the RM identifier: one document may cover several materials, and the same material is
             described by successive document revisions.
@@ -433,8 +457,8 @@
           <xs:documentation>
             A mandatory version string identifying the revision of this document.
             Enables tracking of document updates and ensures recipients can verify
-            they hold the current version (ISO 33401:2024, Section 5.2.13, Mandatory for both
-            document profiles). Its presence is required by this XSD and is additionally asserted
+            they hold the current version (ISO 33401:2024, 5.2.13, Mandatory for both
+            document types). Its presence is required by this XSD and is additionally asserted
             by the companion Schematron rule DRMD-011, so that a Schematron-only validation report
             also covers the requirement.
             A version number, an approval date, or both are acceptable; whichever form is chosen
@@ -459,8 +483,10 @@
   <xs:complexType name="ValidityType">
     <xs:annotation>
       <xs:documentation>
-        The period of validity of the document (ISO 33401:2024, Section 5.2.8), given in one of three
-        ways: valid until revoked, valid for a period after dispatch, or valid until a fixed date.
+        The period of validity of the reference material (ISO 33401:2024, 5.2.8): the time during
+        which the producer states that the material is fit for its intended use. It is given in one
+        of three ways: valid until revoked, valid for a period after dispatch, or valid until a fixed
+        date.
         Software can compare it with the current date, for example to warn before an expired material
         is used.
       </xs:documentation>
@@ -469,8 +495,8 @@
       <xs:element name="untilRevoked" type="xs:boolean" fixed="true">
         <xs:annotation>
           <xs:documentation>
-            The document stays valid until the producer withdraws or replaces it. Suitable for
-            materials whose property values are not expected to change over time.
+            The stated property values stay valid until the producer revokes them, without a fixed end.
+            Suitable for inherently stable materials, whose property values are not expected to change.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -492,13 +518,19 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="period" type="xs:duration" minOccurs="1">
+            <xs:element name="period" minOccurs="1">
               <xs:annotation>
                 <xs:documentation>
-                  A mandatory ISO 8601 duration format string (e.g., 'P3Y2M') stating the exact lifespan
-                  allotted for material use once dispatched.
+                  The period of validity after dispatch (mandatory), as an XML Schema duration, the
+                  subset of ISO 8601 durations defined by xs:duration (e.g., 'P3Y2M'). Negative
+                  durations are not permitted.
                 </xs:documentation>
               </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:duration">
+                  <xs:pattern value="P.+"/>
+                </xs:restriction>
+              </xs:simpleType>
             </xs:element>
           </xs:sequence>
         </xs:complexType>
@@ -553,68 +585,11 @@
     <xs:attribute name="refType" type="drmd:refTypesType" use="optional"/>
   </xs:complexType>
 
-  <xs:complexType name="identificationListType">
-    <xs:annotation>
-      <xs:documentation>
-        A list of further identifications, such as inventory numbers or customer reference numbers.
-      </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="identification" type="drmd:identificationType" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="identificationType">
-    <xs:annotation>
-      <xs:documentation>
-        A further identification: who assigned it, its value, and an optional name saying what kind of
-        identification it is.
-      </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="issuer">
-        <xs:annotation>
-          <xs:documentation>
-            Who assigned the value: the reference material producer, the customer, the owner, or another party.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="referenceMaterialProducer"/>
-            <xs:enumeration value="customer"/>
-            <xs:enumeration value="owner"/>
-            <xs:enumeration value="other"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-
-      <xs:element name="value" type="dcc:notEmptyStringType">
-        <xs:annotation>
-          <xs:documentation>
-            The identification value as assigned by the issuer.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-
-      <xs:element name="name" type="dcc:textType" minOccurs="0">
-        <xs:annotation>
-          <xs:documentation>
-            An optional name, in one or more languages, saying what kind of identification this is,
-            for example 'Inventory number' or 'Customer order number'.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-
-    <xs:attribute name="id" type="xs:ID" use="optional"/>
-    <xs:attribute name="refType" type="drmd:refTypesType" use="optional"/>
-  </xs:complexType>
-
   <xs:complexType name="referenceMaterialProducerType">
     <xs:annotation>
       <xs:documentation>
         The reference material producer: the organisation responsible for the reference material and
-        for this document (ISO 33401:2024, Section 5.2.5). Holds its name, contact details, optional
+        for this document (ISO 33401:2024, 5.2.5). Holds its name, contact details, optional
         statements on electronic seals, signatures and time stamps, and optional organisation
         identifiers such as ROR.
       </xs:documentation>
@@ -706,7 +681,7 @@
       <xs:element name="name" type="dcc:textType">
         <xs:annotation>
           <xs:documentation>
-            The name of the reference material (ISO 33401:2024, Section 5.2.4), as it appears on the
+            The name of the reference material (ISO 33401:2024, 5.2.4), as it appears on the
             label. It may be given in several languages.
           </xs:documentation>
         </xs:annotation>
@@ -717,7 +692,7 @@
           <xs:documentation>
             A description of the material, for example its matrix, form, appearance, dimensions and
             packaging. Text can be accompanied by files such as drawings or photographs.
-            PROFILE NOTE (ISO 33401:2024, §5.3.2): This element is structurally optional in the XSD.
+            DOCUMENT TYPES (ISO 33401:2024, 5.3.2): This element is structurally optional in the XSD.
             For referenceMaterialCertificate documents, the description of the material is MANDATORY
             and its presence is enforced by the companion Schematron rules.
             For productInformationSheet documents, this element is recommended but not required.
@@ -740,8 +715,8 @@
             The smallest amount of material (mass, volume, area, ...) for which the stated property
             values and uncertainties apply, usually derived from the homogeneity study. Software can
             use it to warn when a smaller test portion is used.
-            PROFILE NOTE (ISO 33401:2024, §5.2.7): This element is 'mandatory whenever applicable' for both
-            document profiles. It is structurally optional in the XSD to accommodate materials where a
+            DOCUMENT TYPES (ISO 33401:2024, 5.2.7): This element is 'mandatory whenever applicable' for both
+            document types. It is structurally optional in the XSD to accommodate materials where a
             minimum sample size is not applicable. Its presence is enforced by the companion Schematron
             rule DRMD-008 (conditional-error).
           </xs:documentation>
@@ -762,9 +737,9 @@
           <xs:documentation>
             The identifiers of the reference material, for example product code and batch or lot number,
             used to match the document to the physical unit and to database records.
-            PROFILE NOTE (ISO 33401:2024, Section 5.2.3): this element carries the unique identifier OF THE RM,
-            which is MANDATORY for both document profiles. The element is structurally optional in the XSD only to
-            keep the two profiles on one content model; its presence is enforced by the companion Schematron rule
+            DOCUMENT TYPES (ISO 33401:2024, 5.2.3): this element carries the unique identifier OF THE RM,
+            which is MANDATORY for both document types. The element is structurally optional in the XSD only to
+            keep the two document types on one content model; its presence is enforced by the companion Schematron rule
             DRMD-016 (error). Provide at least one identifier that distinguishes this RM from any other RM issued
             by the same producer, normally a product code and, where units are produced in batches, a batch or lot
             number as a second identifier. Where each unit is individually characterised, add the unit serial number
@@ -779,17 +754,19 @@
   <xs:complexType name="statementListType">
     <xs:annotation>
       <xs:documentation>
-        A structurally ordered container managing auxiliary, narrative operational notes for handling
-        and use of the material.
+        The statements on the material, each in its own element. The schema fixes their order so that
+        software finds each statement in the same place; ISO 33401:2024, 5.1, leaves the order of the
+        information in an RM document to the producer.
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
       <xs:element name="intendedUse" type="dcc:richContentType" minOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            A mandatory metrological disclosure defining the explicitly intended application scope and target
-            analytical techniques (e.g., spark-OES calibration). Where relevant, it also states uses for which
-            the material is not suitable, to help prevent misapplication.
+            The main intended use of the material (mandatory), for example the calibration of spark optical
+            emission spectrometers or the validation of a measurement procedure. It gives users enough
+            information to decide whether the material suits their purpose, and it can state restrictions
+            on its use (ISO 33401:2024, 5.2.6).
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -800,8 +777,8 @@
             A statement on commutability: how closely the reference material behaves like routine samples
             when measured with different measurement procedures. Particularly relevant for clinical and
             biological materials.
-            PROFILE NOTE (ISO 33401:2024, §5.2.9): This element is 'mandatory whenever applicable' for both
-            document profiles. It is structurally optional in the XSD to accommodate materials where
+            DOCUMENT TYPES (ISO 33401:2024, 5.2.9): This element is 'mandatory whenever applicable' for both
+            document types. It is structurally optional in the XSD to accommodate materials where
             commutability is not applicable. Its presence is enforced by the companion Schematron
             rule DRMD-013 (conditional-error).
           </xs:documentation>
@@ -811,8 +788,9 @@
       <xs:element name="storageInformation" type="dcc:richContentType" minOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            Mandatory storage conditions (e.g., temperature, protection from light or moisture, inert gas)
-            needed to keep the material stable and its property values valid.
+            The storage conditions (mandatory), for example temperature, protection from light or moisture,
+            or storage under inert gas, under which the stated property values remain valid
+            (ISO 33401:2024, 5.2.10).
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -820,8 +798,9 @@
       <xs:element name="instructionsForHandlingAndUse" type="dcc:richContentType" minOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            Mandatory preparation instructions detailing e.g., cleaning cycles, physical polishing constraints,
-            and drying workflows required of operators before executing analytical calibrations.
+            Instructions for handling and using the material (mandatory), for example how to open the
+            container, how to homogenise, dry or reconstitute the material before use, and whether and how
+            a unit may be used more than once (ISO 33401:2024, 5.2.11).
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -829,9 +808,10 @@
       <xs:element name="metrologicalTraceability" type="dcc:richContentType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
-            A narrative statement formalizing the chain of comparisons linking certified results back to the
-            SI base units or international calibration benchmarks, supporting laboratory audit trails.
-            PROFILE NOTE (ISO 33401:2024, §5.3.4): This element is structurally optional in the XSD to accommodate
+            The statement of metrological traceability of the certified values: for each certified value,
+            the reference to which it is metrologically traceable, for example the SI, and how traceability
+            was established.
+            DOCUMENT TYPES (ISO 33401:2024, 5.3.4): This element is structurally optional in the XSD to accommodate
             productInformationSheet documents where metrological traceability is not required. For
             referenceMaterialCertificate documents, this element is MANDATORY and its presence is enforced
             by the companion Schematron rules (rule RMC-001).
@@ -842,9 +822,9 @@
       <xs:element name="healthAndSafetyInformation" type="dcc:richContentType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
-            Optional health and safety information, for example the hazards of the material and the
-            protective measures to take. A safety data sheet (SDS) can be attached as a file.
-            PROFILE NOTE (ISO 33401:2024, §5.4.3): This element is 'recommended' for both document profiles.
+            Optional health and safety information, for example a statement on the safety data sheet (SDS)
+            and, for hazardous materials, the warnings that apply. The SDS can be attached as a file.
+            DOCUMENT TYPES (ISO 33401:2024, 5.4.3): This element is 'recommended' for both document types.
             Its presence is encouraged by the companion Schematron rule DRMD-015 (warning).
           </xs:documentation>
         </xs:annotation>
@@ -853,8 +833,9 @@
       <xs:element name="subcontractors" type="dcc:richContentType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
-            An optional transparency record mapping contributions from subcontracted partner laboratories,
-            mainly used in interlaboratory studies.
+            Optional information on subcontractors (ISO 33401:2024, 5.4.4): who contributed to producing
+            the material under a subcontract, and what each of them did. Laboratories that took part in the
+            characterisation can also be named here, with the methods they used.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -862,7 +843,8 @@
       <xs:element name="legalNotice" type="dcc:richContentType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
-            Optional legal notices, for example disclaimers, limitations of liability or the applicable jurisdiction.
+            Optional legal notices (ISO 33401:2024, 5.4.6), for example disclaimers, limitations of liability
+            or the applicable jurisdiction.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -872,7 +854,7 @@
           <xs:documentation>
             An optional reference to the certification report, or to another report describing the
             characterisation, homogeneity and stability studies, given as a citation, a link or an
-            attached file (ISO 33401:2024, §5.4.7, Optional for both document profiles).
+            attached file (ISO 33401:2024, 5.4.7, Optional for both document types).
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -880,8 +862,8 @@
       <xs:element name="statement" type="dcc:richContentType" minOccurs="0" maxOccurs="unbounded">
         <xs:annotation>
           <xs:documentation>
-            A repeatable, generic catch-all narrative element designed to capture auxiliary operational notes
-            for handling and use of the material that lack a dedicated element field.
+            Any further statement for which no dedicated element exists, for example on the origin of the
+            material. Repeatable.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -960,12 +942,13 @@
         A block of property values: its name, an optional description, the measurement procedures,
         the results and optional metadata. The @isCertified attribute states whether the values in
         this block are certified ("true") or informative (attribute omitted or "false").
-        PROFILE NOTE (ISO 33401:2024, §5.3.3):
-        - referenceMaterialCertificate: MUST contain at least one properties block with @isCertified="true".
-          Certified property values MUST include measurement uncertainty and metrological traceability
-          (Schematron rules RMC-002, RMC-003).
-        - productInformationSheet: MUST NOT set @isCertified="true" on any properties block.
-          Uncertainty values are optional (Schematron rule PIS-001).
+        DOCUMENT TYPES (ISO 33401:2024, 5.3.3):
+        - referenceMaterialCertificate: at least one properties block MUST have @isCertified="true"
+          (Schematron rule RMC-002), every certified value MUST carry a measurement uncertainty
+          (RMC-006 to RMC-009), and the certificate MUST state the metrological traceability of the
+          certified values (RMC-001).
+        - productInformationSheet: no properties block may have @isCertified="true" (PIS-001, PIS-003).
+          Uncertainties are optional.
       </xs:documentation>
     </xs:annotation>
 
@@ -995,9 +978,9 @@
             NOTE: This element covers both applied measurement procedures (methods used to establish
             the property values) and intended measurement procedures (methods for which the material
             is suited). Producers are encouraged to clearly distinguish between these in the method
-            descriptions. ISO 33401:2024, §5.2.14 makes procedures for operationally defined measurands
-            'mandatory whenever applicable'; §5.4.2 makes procedures for non-operationally defined
-            measurands 'recommended' for both document profiles. Taken together, the overall requirement
+            descriptions. ISO 33401:2024, 5.2.14 makes procedures for operationally defined measurands
+            'mandatory whenever applicable'; 5.4.2 makes procedures for non-operationally defined
+            measurands 'recommended' for both document types. Taken together, the overall requirement
             is 'mandatory whenever applicable'. The companion Schematron rule DRMD-014 (conditional-error)
             enforces the presence of procedures; RMC-005 (warning) provides an additional advisory
             for certified property blocks.
@@ -1016,7 +999,8 @@
       <xs:element name="measurementMetaData" type="dcc:measurementMetaDataListType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
-            Optional metadata arrays containing further details pertaining to the measurement data.
+            Optional metadata on the measurements in this block, for example the definition of a unit outside
+            the SI in dcc:nonSIUnit and dcc:nonSIDefinition.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1029,20 +1013,21 @@
     <xs:attribute name="isCertified" type="xs:boolean" use="optional">
       <xs:annotation>
         <xs:documentation>
-          States whether the values in this block are certified. "true" marks certified values.
+          States whether the values in this block are certified. "true" (or its equivalent "1") marks
+          certified values.
           Omitted or "false" means the values are informative (not certified), for example indicative
           or additional values.
-          INDICATIVE VALUES (ISO 33401:2024, Section 5.4.5, Optional for both document profiles): indicative
+          INDICATIVE VALUES (ISO 33401:2024, 5.4.5, Optional for both document types): indicative
           values are carried in an ordinary properties block with isCertified omitted or set to 'false'.
           No separate element and no Schematron rule exist for them, because the requirement is optional.
           Give such a block a name that says what it holds (for example 'Indicative values') so that a reader
           and a parser reach the same conclusion as the attribute.
-          PROFILE NOTE (ISO 33401:2024, §5.3.3):
-          - referenceMaterialCertificate: At least one properties block MUST have isCertified="true",
-            and all certified property values MUST include expanded measurement uncertainty
-            and metrological traceability.
-          - productInformationSheet: isCertified MUST NOT be set to "true" on any properties block.
-            This prevents informational RM documents from being misrepresented as certified data.
+          DOCUMENT TYPES (ISO 33401:2024, 5.3.3):
+          - referenceMaterialCertificate: at least one properties block MUST have isCertified="true",
+            every certified value MUST carry a measurement uncertainty (RMC-006 to RMC-009), and the
+            certificate MUST state the metrological traceability of the certified values (RMC-001).
+          - productInformationSheet: isCertified MUST NOT be set to "true" on any properties block
+            (PIS-001, PIS-003), so that a product information sheet cannot present values as certified.
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>

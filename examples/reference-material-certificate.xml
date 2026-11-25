@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Worked example: a complete Reference Material Certificate (CRM profile).
+  SPDX-FileCopyrightText: 2024-2026 Bundesanstalt für Materialforschung und -prüfung (BAM)
+  SPDX-License-Identifier: LGPL-3.0-only
+
+  Worked example: a complete reference material certificate (document type
+  referenceMaterialCertificate).
 
   This file is part of the DRMD test suite. It is valid against drmd.xsd and raises no
   assertion of any severity from drmd-business-rules.sch. Every element required by
@@ -57,10 +61,11 @@
       </drmd:contact>
       <drmd:cryptElectronicSeal>true</drmd:cryptElectronicSeal>
       <drmd:organizationIdentifiers>
+        <!-- A real document gives an identifier of the producer from a public registry, preferably
+             its ROR ID (https://ror.org/). The value below is fictitious, like the producer. -->
         <drmd:organizationIdentifier>
-          <drmd:scheme>ROR</drmd:scheme>
-          <drmd:value>05h9t7c48</drmd:value>
-          <drmd:link>https://ror.org/05h9t7c48</drmd:link>
+          <drmd:scheme>Commercial register</drmd:scheme>
+          <drmd:value>HRB 00000</drmd:value>
         </drmd:organizationIdentifier>
       </drmd:organizationIdentifiers>
     </drmd:referenceMaterialProducer>
@@ -284,12 +289,12 @@
               <dcc:name><dcc:content lang="en">Hardness HBW 2.5/62.5</dcc:content></dcc:name>
               <si:hybrid>
                 <si:real>
-                  <si:label>Brinell hardness, expressed in SI units</si:label>
+                  <si:label>Test force per surface area of the indentation (F/A in N/mm² = HBW/0.102)</si:label>
                   <si:value>1.03e9</si:value>
                   <si:unit>\pascal</si:unit>
                 </si:real>
                 <si:real>
-                  <si:label>Brinell hardness, expressed in the conventional hardness scale</si:label>
+                  <si:label>Brinell hardness on the conventional HBW scale</si:label>
                   <si:value>105</si:value>
                   <si:unit>HBW 2.5/62.5</si:unit>
                 </si:real>
@@ -306,7 +311,10 @@
           </dcc:name>
           <dcc:nonSIDefinition>Brinell hardness measured with a 2.5 mm tungsten carbide ball at a
             test force of 62.5 kgf (612.9 N), reported on the conventional HBW scale as defined in
-            ISO 6506-1. The SI-encoded sibling quantity states the same result in pascal.</dcc:nonSIDefinition>
+            ISO 6506-1. The hardness number is 0.102 times the test force in newton divided by the
+            surface area of the indentation in square millimetres. The SI sibling gives this force
+            per area in pascal (105 HBW corresponds to 1.03 GPa), as the hybrid form of D-SI
+            requires; it is not a different hardness value.</dcc:nonSIDefinition>
           <dcc:nonSIUnit>HBW 2.5/62.5</dcc:nonSIUnit>
         </dcc:metaData>
       </drmd:measurementMetaData>

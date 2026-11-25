@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+  SPDX-FileCopyrightText: 2026 Bundesanstalt für Materialforschung und -prüfung (BAM)
+  SPDX-FileCopyrightText: QUDT.org (names of the quantity kinds)
+  SPDX-License-Identifier: LGPL-3.0-only AND CC-BY-4.0
+
   quantitykind.xsd: QUDT quantity-kind type for the D-SI schema (SI_Format.xsd).
 
   WHY THIS FILE EXISTS
@@ -16,8 +20,9 @@
   tools/vendor_supporting_schemas.py. 1158 quantity kinds are enumerated.
 
   STATUS: LOCAL SUBSTITUTE
-  This is a local substitute for PTB's published quantitykind.xsd, not a copy of it. It is
-  written to accept every value PTB's file is expected to accept: for each QUDT quantity kind
+  This is a local substitute for PTB's published quantitykind.xsd, not a copy of it, and it has
+  not been compared with PTB's file. It is written to accept the values PTB's file is expected
+  to accept: for each QUDT quantity kind
   both the local name (recommended, e.g. "MassFraction") and the full QUDT IRI
   (e.g. "http://qudt.org/vocab/quantitykind/MassFraction") are permitted. Run
   tools/vendor_supporting_schemas.py with the "refresh" option to replace this file with PTB's
@@ -28,8 +33,13 @@
   abstract element si:quantityType (type xs:string), and XSD 1.0 requires the substituting
   element's type to be validly derived from the head element's type.
 
-  QUDT is published by the QUDT.org project under the Creative Commons Attribution 4.0
-  International licence (CC BY 4.0). See https://qudt.org/ for terms and attribution.
+  LICENCE AND ATTRIBUTION
+  The names and IRIs of the quantity kinds are taken from the QUDT Quantity Kind Vocabulary
+  (QUDT.org, http://qudt.org/vocab/quantitykind), licensed under Creative Commons Attribution
+  4.0 International (CC BY 4.0, https://creativecommons.org/licenses/by/4.0/). Changes made:
+  only the names and IRIs were extracted and written as an XML Schema enumeration. QUDT.org
+  does not endorse the DRMD. The structure and comments of this file are by BAM, under the GNU
+  Lesser General Public License, version 3 (LGPL-3.0-only).
 
   Generated: 2026-09-09
 -->

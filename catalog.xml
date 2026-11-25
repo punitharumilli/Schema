@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+  SPDX-FileCopyrightText: 2024-2026 Bundesanstalt für Materialforschung und -prüfung (BAM)
+  SPDX-License-Identifier: LGPL-3.0-only
+
   OASIS XML catalog for offline, reproducible DRMD validation.
 
   WHY IT IS NEEDED
@@ -19,7 +22,7 @@
 
   HOW TO USE IT
     libxml2 / xmllint :  export XML_CATALOG_FILES=/path/to/schema/catalog.xml
-    Java (JAXP)       :  use an org.apache.xml.resolver / xmlresolver CatalogResolver
+    Java (JAXP)       :  javax.xml.catalog.CatalogManager, see README.md and tests/XercesCheck.java
     Python            :  see tools/validate.py, which sets XML_CATALOG_FILES for lxml
 
   Keep this file next to drmd.xsd. The paths below are relative to this file's location.

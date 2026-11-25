@@ -1,0 +1,78 @@
+cff-version: 1.2.0
+message: >-
+  If you use the DRMD schema or its business rules, please cite the version you used with the
+  metadata in this file.
+type: software
+title: "DRMD: Digital Reference Material Document, XML Schema and business rules"
+version: 1.0.0
+license: LGPL-3.0-only
+repository-code: "https://github.com/BAMresearch/drmd-schema"
+url: "https://bamresearch.github.io/drmd/"
+authors:
+  - family-names: Arumilli
+    given-names: Punith Durga Prasad
+    orcid: "https://orcid.org/0009-0004-1165-9000"
+    affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+  - family-names: Melzer
+    given-names: Michael
+    affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+  - family-names: Monavari
+    given-names: Mehran
+    affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+  - family-names: Richter
+    given-names: Silke
+    affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+  - family-names: van de Kreeke
+    given-names: Johannes
+    affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+  - family-names: Prellwitz
+    given-names: Matthias
+    affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+  - family-names: Koch
+    given-names: Claudia
+    affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+abstract: >-
+  The Digital Reference Material Document (DRMD) is an XML format for the documents that
+  accompany reference materials: the RM certificate of a certified reference material and the
+  product information sheet of any other reference material. Version 1.0.0 consists of an XML
+  Schema (drmd.xsd), which defines the structure shared by both document types, and Schematron
+  business rules (drmd-business-rules.sch), which check the requirements of ISO 33401:2024,
+  Table 1, for each document type with four severity levels derived from the requirement levels
+  of the standard. Values, units and uncertainties are written in the Digital System of Units
+  (D-SI) of PTB, and shared building blocks are taken from the Digital Calibration Certificate
+  (DCC) of PTB. The repository includes the vendored third-party schemas, an XML catalog for
+  offline validation, two worked examples, a validation tool and a test that every rule fires.
+keywords:
+  - reference materials
+  - certified reference materials
+  - ISO 33401
+  - digital certificate
+  - XML Schema
+  - Schematron
+  - D-SI
+  - DCC
+  - metrology
+  - quality infrastructure
+references:
+  - type: standard
+    title: "ISO 33401:2024 Reference materials: Contents of certificates, labels and accompanying documentation"
+    authors:
+      - name: "International Organization for Standardization"
+    year: 2024
+  - type: conference-paper
+    title: "The Digital Reference Material Document: From paper certificates to interoperable data objects in digital quality infrastructure"
+    authors:
+      - family-names: Prellwitz
+        given-names: Matthias
+      - family-names: Koch
+        given-names: Claudia
+      - family-names: Richter
+        given-names: Silke
+      - family-names: van de Kreeke
+        given-names: Johannes
+      - family-names: Melzer
+        given-names: Michael
+      - family-names: Monavari
+        given-names: Mehran
+    year: 2025
+    doi: 10.21014/tc6-2025.067
