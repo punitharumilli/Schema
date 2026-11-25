@@ -13,21 +13,6 @@ authors:
     given-names: Punith Durga Prasad
     orcid: "https://orcid.org/0009-0004-1165-9000"
     affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
-  - family-names: Melzer
-    given-names: Michael
-    affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
-  - family-names: Monavari
-    given-names: Mehran
-    affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
-  - family-names: Richter
-    given-names: Silke
-    affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
-  - family-names: van de Kreeke
-    given-names: Johannes
-    affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
-  - family-names: Prellwitz
-    given-names: Matthias
-    affiliation: "Bundesanstalt für Materialforschung und -prüfung (BAM)"
 abstract: >-
   The Digital Reference Material Document (DRMD) is an XML format for the documents that
   accompany reference materials: the RM certificate of a certified reference material and the
